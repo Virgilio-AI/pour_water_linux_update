@@ -15,24 +15,64 @@ homeFolder=$1
 # git/repo/folder
 gitRepoFolder=$2
 
+# for lazygit execution after ending the sync
+lazygit=$3
+
+
+# crate the folder for the logs
+
+mkdir -p /tmp/water_linux/Log/
+touch /tmp/water_linux/Log/pour.txt
+
+
+# functions
+
+
+function SyncFolder()
+{
+	src=$1
+	target=$2
+	mkdir -p ${target::-2} >> /tmp/water_linux/Log/pour.txt
+
+	if [[ -d ${src::-2} ]]
+	then
+		rsync -aAXv $src $target >> /tmp/water_linux/Log/pour.txt
+	fi
+}
+
+
+
+
+
+
+
+
+
+# --------------------------------------------------------------
+# the actual code of the installation
 
 # ==========================
 # ========== Sync the .confi folder ======
 # ==========================
 # nvim:
-sudo rsync -aAXv --exclude=personal --exclude=skeletons.vim --exclude=UltiSnips --exclude=Plugins --exclude=.vimdata $homeFolder/.config/nvim/ $gitRepoFolder/.config/nvim/
+# the first one has so much folders to ignore so will just create the folder here
+mkdir -p $gitRepoFolder/.config/nvim > /tmp/water_linux/Log/pour.txt
+rsync -aAXv --exclude=personal --exclude=skeletons.vim --exclude=UltiSnips --exclude=Plugins --exclude=.vimdata $homeFolder/.config/nvim/ $gitRepoFolder/.config/nvim/ >> /tmp/water_linux/Log/pour.txt
+#
+### the next ones we can use the function
+#
 # awesome:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/awesome/ $gitRepoFolder/.config/awesome/
+SyncFolder $homeFolder/.config/awesome/ $gitRepoFolder/.config/awesome/
 # mpd:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/mpd/ $gitRepoFolder/.config/mpd/
+SyncFolder $homeFolder/.config/mpd/ $gitRepoFolder/.config/mpd/
 # ncmpcpp:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/ncmpcpp/ $gitRepoFolder/.config/ncmpcpp/
+SyncFolder $homeFolder/.config/ncmpcpp/ $gitRepoFolder/.config/ncmpcpp/
 # neofetch:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/neofetch/ $gitRepoFolder/.config/neofetch/
+SyncFolder $homeFolder/.config/neofetch/ $gitRepoFolder/.config/neofetch/
 # ranger:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/ranger/ $gitRepoFolder/.config/ranger/
+SyncFolder $homeFolder/.config/ranger/ $gitRepoFolder/.config/ranger/
 # zsh:
-sudo rsync -aAXv --exclude=personal $homeFolder/.config/zsh/ $gitRepoFolder/.config/zsh/
+SyncFolder $homeFolder/.config/zsh/ $gitRepoFolder/.config/zsh/
 
 
 
@@ -41,22 +81,28 @@ sudo rsync -aAXv --exclude=personal $homeFolder/.config/zsh/ $gitRepoFolder/.con
 # ==========================
 
 # bin:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/bin/ $gitRepoFolder/.local/bin/
+SyncFolder $homeFolder/.local/bin/ $gitRepoFolder/.local/bin/
 # etc:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/etc/ $gitRepoFolder/.local/etc/
+SyncFolder $homeFolder/.local/etc/ $gitRepoFolder/.local/etc/
 # lib:
 
 # suckless files
 # dwm:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/src/dwm $gitRepoFolder/.local/src/dwm
+SyncFolder $homeFolder/.local/src/dwm/ $gitRepoFolder/.local/src/dwm/
 # dwmblocks:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/src/dwmblocks $gitRepoFolder/.local/src/dwmblocks
+SyncFolder $homeFolder/.local/src/dwmblocks/ $gitRepoFolder/.local/src/dwmblocks/
 # dmenu:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/src/dmenu $gitRepoFolder/.local/src/dmenu
+SyncFolder $homeFolder/.local/src/dmenu/ $gitRepoFolder/.local/src/dmenu/
 # awesome:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/src/awesome $gitRepoFolder/.local/src/awesome
+SyncFolder $homeFolder/.local/src/awesome/ $gitRepoFolder/.local/src/awesome/
 # st:
-sudo rsync -aAXv --exclude=personal $homeFolder/.local/src/st $gitRepoFolder/.local/src/st
+SyncFolder $homeFolder/.local/src/st/ $gitRepoFolder/.local/src/st/
 
-cd $gitRepoFolder
-lazygit
+# use () instead of [[]] for some examples
+if [[ $lazygit == "lazygit" ]]
+then
+	cd $gitRepoFolder
+	lazygit
+fi
+
+

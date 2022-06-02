@@ -32,11 +32,11 @@ function SyncFolder()
 {
 	src=$1
 	target=$2
-	mkdir -p ${target::-2} >> /tmp/water_linux/Log/pour.txt
+	mkdir -p ${target::-1} |& tee -a /tmp/water_linux/Log/pour.txt
 
-	if [[ -d ${src::-2} ]]
+	if [[ -d ${src::-1} ]]
 	then
-		rsync -aAXv $src $target >> /tmp/water_linux/Log/pour.txt
+		rsync -aAXv $src $target |& tee -a /tmp/water_linux/Log/pour.txt
 	fi
 }
 
@@ -56,11 +56,15 @@ function SyncFolder()
 # ==========================
 # nvim:
 # the first one has so much folders to ignore so will just create the folder here
-mkdir -p $gitRepoFolder/.config/nvim > /tmp/water_linux/Log/pour.txt
-rsync -aAXv --exclude=personal --exclude=skeletons.vim --exclude=UltiSnips --exclude=Plugins --exclude=.vimdata $homeFolder/.config/nvim/ $gitRepoFolder/.config/nvim/ >> /tmp/water_linux/Log/pour.txt
+mkdir -p $gitRepoFolder/.config/nvim |& tee /tmp/water_linux/Log/pour.txt
+rsync -aAXv --exclude=personal  --exclude=UltiSnips --exclude=Plugins --exclude=.vimdata $homeFolder/.config/nvim/ $gitRepoFolder/.config/nvim/ |& tee -a /tmp/water_linux/Log/pour.txt
+
 #
 ### the next ones we can use the function
 #
+
+
+
 # awesome:
 SyncFolder $homeFolder/.config/awesome/ $gitRepoFolder/.config/awesome/
 # mpd:
@@ -104,5 +108,4 @@ then
 	cd $gitRepoFolder
 	lazygit
 fi
-
 

@@ -14,7 +14,6 @@
 homeFolder=$1
 # git/repo/folder
 gitRepoFolder=$2
-
 # for lazygit execution after ending the sync
 lazygit=$3
 
@@ -64,6 +63,9 @@ rsync -aAXv $homeFolder/.config/nvim/ $gitRepoFolder/.config/nvim/ |& tee -a /tm
 #
 
 
+# create the leetcode folder:
+mkdir -p $gitRepoFolder/.leetcode
+
 
 # awesome:
 SyncFolder $homeFolder/.config/awesome/ $gitRepoFolder/.config/awesome/
@@ -77,6 +79,11 @@ SyncFolder $homeFolder/.config/neofetch/ $gitRepoFolder/.config/neofetch/
 SyncFolder $homeFolder/.config/ranger/ $gitRepoFolder/.config/ranger/
 # zsh:
 SyncFolder $homeFolder/.config/zsh/ $gitRepoFolder/.config/zsh/
+# xmodmap:
+SyncFolder $homeFolder/.config/xmodmap/ $gitRepoFolder/.config/xmodmap/
+# Leetcode Client:
+SyncFolder $homeFolder/.leetcode/ $gitRepoFolder/.leetcode/
+
 
 
 
@@ -108,3 +115,4 @@ then
 	cd $gitRepoFolder
 	lazygit
 fi
+

@@ -111,3 +111,10 @@ then
 	lazygit
 fi
 
+# use () instead of [[]] for some examples
+if [[ $lazygit == "lg" ]]
+then
+	cd $gitRepoFolder
+	lazygit
+fi
+
